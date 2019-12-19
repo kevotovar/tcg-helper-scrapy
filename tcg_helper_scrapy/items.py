@@ -19,3 +19,5 @@ class MylItem(scrapy.Item):
     errata = scrapy.Field()
     keywords = scrapy.Field()
     valid_formats = scrapy.Field()
+    file_urls = scrapy.Field()
+    files = scrapy.Field()

@@ -6,20 +6,22 @@ import shutil
 import os
 import io
 import errno
-import wget
+import urllib
+import ssl
 from PIL import Image
 from unicodedata import normalize
 from tcg_helper_scrapy.items import MylItem
 
+ssl._create_default_https_context = ssl._create_unverified_context
 
 class MylSpider(scrapy.Spider):
     name = 'myl'
     allowed_domains = ['api.myl.cl']
-    card_image_base_url = 'https://api.myl.cl/static/cards/{}/{}.jpg'
+    card_image_base_url = 'https://api.myl.cl/static/cards/{}/{}.png'
     card_detail_base_url = 'https://api.myl.cl/cards/profile/{}/{}'
     start_urls = [
         'https://api.myl.cl/cards/edition/terrores-nocturnos',
-        ''
+        'https://api.myl.cl/cards/edition/invasion-oscura'
     ]
 
     def create_card_detail_base_url(self, edition, slug):
@@ -44,18 +46,7 @@ class MylSpider(scrapy.Spider):
         yield MylItem(
             **response_json['details'],
             errata=response_json['errata'],
-            valid_formats=response_json['valid_formats']
+            valid_formats=response_json['valid_formats'],
+            edition_id=response_json['edition']['id'],
+            file_urls=[self.card_image_base_url.format(edition, response_json['details']['edid'])]
         )
-        self.download_image(
-            edition, response_json['details']['edid'])
-
-    def download_image(self, edition_id, card_edition_id):
-        url = self.card_image_base_url.format(edition_id, card_edition_id)
-        filename = f'images/{edition_id}-{card_edition_id}.jpg'
-        response = requests.get(url, verify=False)
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-        image_file = io.BytesIO(response.content)
-        image = Image.open(image_file).convert('RGB')
-        with open(filename, 'wb') as out_file:
-            image.save(out_file, 'JPEG', quality=85)
-        del response

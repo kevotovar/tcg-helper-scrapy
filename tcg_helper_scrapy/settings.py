@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 # Scrapy settings for tcg_helper_scrapy project
 #
 # For simplicity, this file contains only settings considered important or
@@ -64,9 +65,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'tcg_helper_scrapy.pipelines.TcgHelperScrapyPipeline': 300,
-#}
+ITEM_PIPELINES = {
+  'scrapy.pipelines.files.FilesPipeline': 1
+}
+FILES_STORE = os.path.join('images')
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
