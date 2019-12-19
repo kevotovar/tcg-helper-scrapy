@@ -20,8 +20,17 @@ class MylSpider(scrapy.Spider):
     card_image_base_url = 'https://api.myl.cl/static/cards/{}/{}.png'
     card_detail_base_url = 'https://api.myl.cl/cards/profile/{}/{}'
     start_urls = [
+        'https://api.myl.cl/cards/edition/invasion-oscura',
         'https://api.myl.cl/cards/edition/terrores-nocturnos',
-        'https://api.myl.cl/cards/edition/invasion-oscura'
+        'https://api.myl.cl/cards/edition/tinta-inmortal',
+        'https://api.myl.cl/cards/edition/arsenal',
+        'https://api.myl.cl/cards/edition/kilimanjaro',
+        'https://api.myl.cl/cards/edition/calavera',
+        'https://api.myl.cl/cards/edition/olimpia',
+        'https://api.myl.cl/cards/edition/dharma',
+        'https://api.myl.cl/cards/edition/kemet',
+        'https://api.myl.cl/cards/edition/legado-gotico',
+        'https://api.myl.cl/cards/edition/hijos-del-sol',
     ]
 
     def create_card_detail_base_url(self, edition, slug):
